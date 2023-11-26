@@ -93,6 +93,8 @@ class bus_booking:
                     fp = fp.lower()
                     cur.execute('select r_id from route where s_name=? and e_name=?', (fp, tp))
                     res_route = cur.fetchall()
+                    print(res_route)
+                    print(len(res_route))
                     if len(res_route)==0:
                         showerror('no route found','we are currently not running on this route')
                     else:
@@ -101,8 +103,8 @@ class bus_booking:
                                 print(j)
                                 val_route = str(j)
 
-                            cur.execute('select bus_id from bus where route_id=?', (val_route))
-                            res_bid = cur.fetchall()
+                        cur.execute('select bus_id from bus where route_id=?', (val_route))
+                        res_bid = cur.fetchall()
 
                         if len(res_bid)==0:
                             showerror('no bus found','we have not started any bus on this route yet!!')
@@ -115,6 +117,7 @@ class bus_booking:
                             for i in range(len(val_bid)):
                                 cur.execute('select b_id from running where run_date=? and b_id=? ',(jd, val_bid[i]))
                                 res_new_bid.append(cur.fetchall())
+                            print(res_new_bid)
                             #print(res_new_bid)
                             b=[]
                             for i in res_new_bid:
@@ -136,17 +139,18 @@ class bus_booking:
                                 serial_no=1
                                 for i in b:
                                     bus_no=i
-                                    cur.execute('select op_id from bus where bus_id=?',(i))
+                                    print(bus_no)
+                                    cur.execute('select op_id from bus where bus_id=?', (i,))
                                     res_opr_id=cur.fetchall()
                                     for j in res_opr_id:
                                         opr_id=j[0]
 
-                                    cur.execute('select name from operator where opr_id=?',(opr_id))
+                                    cur.execute('select name from operator where opr_id=?',(opr_id,))
                                     res_opr_name=cur.fetchall()
                                     for j in res_opr_name:
                                         opr_name=j[0]
 
-                                    cur.execute('select bus_type from bus where bus_id=?',(i))
+                                    cur.execute('select bus_type from bus where bus_id=?',(i,))
                                     res_bus_type=cur.fetchall()
                                     for j in res_bus_type:
                                         bus_type=j[0]
@@ -156,7 +160,7 @@ class bus_booking:
                                     for j in res_seat_avail:
                                         seat_avail=j[0]
 
-                                    cur.execute('select fair from bus where bus_id=?',(i))
+                                    cur.execute('select fair from bus where bus_id=?',(i,))
                                     res_fare=cur.fetchall()
                                     for j in res_fare:
                                         fare=j[0]
